@@ -19,12 +19,13 @@ html = f.text
 html.encode('utf-8')
 ff=pq(html)
 sel=ff('select[name=fish]').find('option').items()
+path = "F:/htmls/fish5.25/"
 for i in sel:
     id=i.attr('value')
     if id=='0':
         continue
     elif int(id) > 3192:
-        id_file = Path("F:/htmls/fish5.25/" + id + ".html")
+        id_file = Path(path + id + ".html")
         if id_file.exists():
             continue
         print(id)
@@ -32,7 +33,6 @@ for i in sel:
         print(url1)
         html1 = requests.get(url1).text
         html1.encode('utf-8')
-        my_file = Path("F:/htmls/fish5.25/")
+        my_file = Path(path)
         if my_file.exists():
-            write_to_file("F:/htmls/fish5.25/" + id + ".html", html1)
-            print "111111111111111111"
+            write_to_file(path + id + ".html", html1)
