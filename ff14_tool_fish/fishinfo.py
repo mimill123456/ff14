@@ -49,7 +49,7 @@ def connecttomysql(sql):
     cur = conn.cursor()
     if isinstance(sql,list):
         for s in sql:
-            # print(sql)
+            print(sql)
             cur.execute(s)
 
     if isinstance(sql,str):
@@ -99,7 +99,45 @@ def fishinfo(fileid):
     collect = tree.xpath('//table[@class="fish_info"]/tr[2]/td/span/img/@title')
     msg = tree.xpath('//table[@class="fish_info"]/tr[3]/td/text()')
     msg2 = tree.xpath('//table[@class="fish_info"]/tr[5]/td/text()')
+
+    ######轻重杆########
+    # 6 7 8 轻杆
+    # 9 10 重杆
+    # 11 12 13 鱼王杆
+    tug=tree.xpath('//canvas[@class="tug_graph"]/@data-value')
+    tug="".join(tug)
+    tug2=""
+    if tug!='':
+        tug1=json.loads(tug)
+        tuglist=[]
+        tugset=set()
+        for k in tug1.keys():
+            if tug1[k]>0.9:
+                tuglist.append(int(k))
+        for kk in tuglist:
+
+            if kk<=8 and kk>=6:
+                tugset.add('轻杆')
+            elif kk<=10 and kk>=9:
+                tugset.add('重杆')
+            elif kk<=13 and kk>=11:
+                tugset.add('鱼王杆')
+        tuglist=list(tugset)
+        tug2="".join(tuglist)
+    # print(tug1)
+
+    ################
+    '''2.0-201-312 112
+        3.0-462-505 44
+        4.x-637，760-773，808-834，840-845 1+13+27+6=47
+        5.1-3179-3182 4'''
     id = "".join(id)
+    id=int(id)
+    king=''
+    if (201<=id and id<=312) or (462<=id and id<=505) or id==637 or (760<=id and id<=773) or (808<=id and id<=834) or (840<=id and id<=845) or (3179<=id and id<=3182):
+        king='鱼王'
+    id=str(id)
+    ################
     # print('id:'+id)
     name = "".join(name)
     # print('name:'+name)
@@ -181,7 +219,7 @@ def fishinfo(fileid):
             # print(fb)
             sql2 = "INSERT INTO `ff_bait_fish` (`fishid`, `fishname`, `baitid`, `baitname`, `probability`, `is_small_to_big`) VALUES ('"+fb.fid+"', '"+fb.fname+"', '"+fb.bid+"', '"+fb.bname+"', '"+fb.gl+"', '"+fb.stob+"');"
             fish_bait.append(sql2)
-            print("起钓概率:",x[0],"鱼饵id:",x[1],"鱼饵:",re.sub(r'<[^>]+>',"",x[2],re.S),"是否以小钓大:",x[3])
+            # print("起钓概率:",x[0],"鱼饵id:",x[1],"鱼饵:",re.sub(r'<[^>]+>',"",x[2],re.S),"是否以小钓大:",x[3])
     else:
         for x in res2:
             fb = f_b()
@@ -189,7 +227,7 @@ def fishinfo(fileid):
             fb.fid = id
             fb.fname = name
             fb.gl = x[0]
-            print(fb)
+            # print(fb)
             sql2 = "INSERT INTO `ff_bait_fish` (`fishid`, `fishname`, `baitid`, `baitname`, `probability`, `is_small_to_big`) VALUES ('" + fb.fid + "', '" + fb.fname + "', '" + fb.bid + "', '" + fb.bname + "', '" + fb.gl + "', '" + fb.stob + "');"
             fish_bait.append(sql2)
             # print("起钓概率:",x[0],"鱼叉:",re.sub(r'<[^>]+>',"",x[2],re.S),"是否以小钓大:",x[3])
@@ -211,10 +249,10 @@ def fishinfo(fileid):
         elif us=="007":
             use.append('炼金')
     use="".join(use)
-    sql = "INSERT INTO `ff_fish` (`fish_id`, `fish_name`, `msg`, `msg2`, `is_small_to_big`, `IL`, `use`, `where`, `version`, `weather`,`collect`,`time`) VALUES ('" + id + "', '" + name + "', \"" + msg + "\", \"" + msg2 + "\", '', '" + lv_res + "', '"+use+"', '" + spot + "', '" + version + "', '" + weather + "','" + collect + "','" + time + "');"
+    sql = "INSERT INTO `ff_fish` (`fish_id`, `fish_name`, `msg`, `msg2`, `is_small_to_big`, `IL`, `use`, `where`, `version`, `weather`,`collect`,`time`,`tug`,`is_king`) VALUES ('" + id + "', '" + name + "', \"" + msg + "\", \"" + msg2 + "\", '', '" + lv_res + "', '"+use+"', '" + spot + "', '" + version + "', '" + weather + "','" + collect + "','" + time + "','"+tug2+"','"+king+"');"
     # connecttomysql(sql) #插入除以小钓大以外的数据
-    # connecttomysql(upsqls) #更新以小钓大数据
-    connecttomysql(fish_bait) #更新鱼与鱼饵关系
+    connecttomysql(upsqls) #更新以小钓大数据
+    # connecttomysql(fish_bait) #更新鱼与鱼饵关系
     return sql
 
 

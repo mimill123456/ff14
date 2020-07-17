@@ -11,7 +11,7 @@ def write_to_file(filename, con):
     file_object.write(con)
     file_object.close()
 
-url='https://ff14angler.com/index.php?lang=cn'
+url='https://cn.ff14angler.com/index.php'
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
 f = requests.get(url,headers=headers)
 html = f.text
@@ -22,15 +22,16 @@ for i in sel:
     id=i.attr('value')
     if id=='0':
         continue
-    id_file = Path("F:/htmls/fish1/" + id + ".html")
-    if id_file.exists():
-        continue
-    print(id)
-    url1='https://ff14angler.com/index.php?lang=cn&fish='+id
-    print(url1)
-    html1 = requests.get(url1).text
-    html1.encode('utf-8')
+    elif int(id) > 3192:
+        id_file = Path("F:/htmls/fish5.25/" + id + ".html")
+        if id_file.exists():
+            continue
+        print(id)
+        url1='https://cn.ff14angler.com/fish/'+id
+        print(url1)
+        html1 = requests.get(url1).text
+        html1.encode('utf-8')
 
-    my_file = Path("F:/htmls/fish1/")
-    if my_file.exists():
-        write_to_file("F:/htmls/fish1/" + id + ".html", html1)
+        my_file = Path("F:/htmls/fish5.25/")
+        if my_file.exists():
+            write_to_file("F:/htmls/fish5.25/" + id + ".html", html1)

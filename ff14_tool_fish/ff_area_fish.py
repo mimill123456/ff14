@@ -1,7 +1,7 @@
 import requests
 import re
 from pyquery import PyQuery as pq
-import fishinfo
+import ff14_tool_fish.fishinfo as fishinfo
 import pymysql
 # conn = pymysql.connect(host='127.0.0.1',port=3306,user='root',password='1234',database='ff14',charset='utf8mb4')
 # cur=conn.cursor()
