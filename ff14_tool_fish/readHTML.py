@@ -1,5 +1,5 @@
 import os
-import GitHub_ff14.fishinfo as fishinfo
+import ff14_tool_fish.fishinfo as fishinfo
 
 testid="418.html"
 

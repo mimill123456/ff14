@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="data.js"></script>
+<meta charset="utf-8">
+<title>js代码转json工具</title>
+
+</head>
+<body>
+<script>
+function displayDate(){
+	document.getElementById("demo").innerHTML=DATA;
+	
+	var jsonStr = JSON.stringify(DATA); 
+	console.log(jsonStr)
+}
+</script>
+<h1>我的第一个 JavaScript 程序</h1>
+<p id="demo">这是一个段落</p>
+
+<button type="button" onclick="displayDate()">js转换json</button>
+
+</body>
+</html>

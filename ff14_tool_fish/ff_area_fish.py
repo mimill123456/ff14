@@ -2,12 +2,10 @@ import requests
 import re
 from pyquery import PyQuery as pq
 import ff14_tool_fish.fishinfo as fishinfo
-import pymysql
-# conn = pymysql.connect(host='127.0.0.1',port=3306,user='root',password='1234',database='ff14',charset='utf8mb4')
-# cur=conn.cursor()
+
 sql=[]
-for v in range(1,13):
-    url="https://ff14angler.com/index.php?lang=cn&spot="+str(v)+"0000"
+for v in range(1,14):
+    url="https://cn.ff14angler.com/?spot="+str(v)+"0000"
     html = requests.get(url=url).text
     ff=pq(html)
     # print(ff)
@@ -27,12 +25,16 @@ for v in range(1,13):
                 thr=re.sub(r'<[^>]+>',"",a[2],re.S)
                 thr=thr.split('　')
                 areaname=a[1]
-                if areaname=="Unspoiled teeming waters":
-                    areaname="未知的鱼影"
-                elif areaname=="North Isle of Endless Summer":
-                    areaname="永夏岛北"
-                elif areaname=="Northwest Bronze Lake":
-                    areaname="石绿湖西北岸"
+                dicareaname = {"Unspoiled teeming waters":"未知的鱼影",
+                               "North Isle of Endless Summer":"永夏岛北",
+                               "Northwest Bronze Lake":"石绿湖西北岸",
+                               "Mjrl's Tears":"玛莉露之泪",
+                               "Central Lake Tusi Mek'ta":"蛇水湖中部",
+                               "South Lake Tusi Mek'ta":"蛇水湖南"}
+
+                if areaname in dicareaname.keys():
+                    areaname=dicareaname[areaname]
+
                 if "".join(thr)!='' and "".join(a)!='' and a[3]=='1':
                     # print(ff_mapname,area,a[0],a[1],thr[0],thr[1])
                     sql.append("INSERT INTO `ff_fisharea` (`area_id`, `big_map_name`, `area_name`, `is_eye`, `level`, `map_name`) VALUES ('"+a[0]+"', '"+area+"', '"+areaname+"', '"+thr[1]+"', '"+thr[0]+"', '"+ff_mapname+"');")

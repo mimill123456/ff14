@@ -1,12 +1,7 @@
 from pyquery import PyQuery as pq
 import re
-import time
-import pymysql
 import os
-
-conn = pymysql.connect(host='127.0.0.1',port=3306,user='root',password='1234',database='ff14',charset='utf8mb4')
-cur=conn.cursor()
-
+import ff14_tool_fish.fishinfo as fishinfo
 file_names = os.listdir("F:/htmls/fish_area")
 
 for file in file_names:
@@ -26,9 +21,5 @@ for file in file_names:
                 if len(id1) == 0:
                     continue
                 sql = "INSERT INTO `ff_area_fish` (`area_id`, `fish_id`) VALUES ('" + file+ "', '" + ''.join(id1) + "')"
+                fishinfo.connecttomysql(sql)
                 print(sql)
-                cur.execute(sql)
-    conn.commit()
-cur.close()
-conn.close()
-    # pq(file_object)

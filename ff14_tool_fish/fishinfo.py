@@ -26,7 +26,7 @@ class f_b:
 
 
 def testMysql2(sql):
-    db = MySQLdb.connect(host='localhost', user='root', passwd='1234', db='ff14',
+    db = MySQLdb.connect(host='localhost', user='root', passwd='123456', db='ff14',
                          cursorclass=MySQLdb.cursors.DictCursor, charset='utf8mb4')
     cursor = db.cursor()
     cursor.execute(sql)
@@ -44,7 +44,7 @@ def testMysql2(sql):
 
 
 def connecttomysql(sql):
-    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='1234', database='ff14',
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', password='123456', database='ff14',
                            charset='utf8mb4')
     cur = conn.cursor()
     if isinstance(sql,list):

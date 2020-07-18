@@ -1,16 +1,18 @@
 # import sys
 # sys.path.append(r"F:\PycharmProjects\Utils")
-import fishinfo
+import ff14_tool_fish.fishinfo as fishinfo
 import json
 
 
-sql="SELECT a.fish_id,a.fish_name,a.time,a.weather,a.`where`,b.area_name from ff_fish a LEFT JOIN ff_fisharea b ON a.`where`=b.area_id"
+sql="SELECT a.fish_id,a.fish_name,a.time,a.weather,b.area_name,a.is_king,a.tug,a.folklore,a.hookset,a.pweather,a.fish_eyes_skill,a.collect  from ff_fish a LEFT JOIN ff_fisharea b ON a.`where`=b.area_id"
 res=fishinfo.testMysql2(sql)
 js=json.loads(res)
 resx={}
 for x in js:
     x["baits"]=[]
+    x["areas"]=[]
     resx[x["fish_name"]]=x
+
 
 sql1 ="SELECT a.fish_id,a.fish_name,a.time,a.weather,b.area_id,b.area_name,c.baitname,c.probability from ff_fish a LEFT JOIN ff_fisharea b ON a.`where`=b.area_id LEFT JOIN ff_bait_fish c ON a.fish_id=c.fish_id"
 
@@ -28,6 +30,14 @@ for y in js1:
 sql2="SELECT a.*,c.fish_name FROM ff_fisharea a LEFT JOIN ff_area_fish b ON a.area_id=b.area_id LEFT JOIN ff_fish c ON b.fish_id=c.fish_id"
 res2=fishinfo.testMysql2(sql2)
 js2=json.loads(res2)
+for f in js2:
+    print(f["fish_name"])
+    if f["fish_name"]:
+        if f["fish_name"]==resx[f["fish_name"]]["fish_name"]:
+            resx[f["fish_name"]]["areas"].append(f["area_name"])
+
+
+
 world_map={}
 big_big_mapkey=set()
 big_map=set()
@@ -65,8 +75,8 @@ for world in world_map.keys():
         for area in world_map[world][big_map].keys():
             world_map[world][big_map][area]["fishs"]=list(fishs[area])
 
-print(world_map)
+# print(world_map)
 resz={}
 resz["fishinfo"]=resx
 resz["areainfo"]=world_map
-fishinfo.write_to_file("F:/htmls/json3.txt",str(resz))
+fishinfo.write_to_file("F:/htmls/json2.txt",str(resz))

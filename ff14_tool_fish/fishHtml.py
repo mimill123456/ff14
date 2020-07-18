@@ -1,15 +1,7 @@
 import requests
 from pyquery import PyQuery as pq
-import re
-import time
-import pymysql
-import os
 from pathlib import Path
-
-def write_to_file(filename, con):
-    file_object = open(filename, 'w', encoding='utf-8')
-    file_object.write(con)
-    file_object.close()
+import ff14_tool_fish.fishinfo as fishinfo
 
 
 url='https://cn.ff14angler.com/index.php'
@@ -24,7 +16,7 @@ for i in sel:
     id=i.attr('value')
     if id=='0':
         continue
-    elif int(id) > 3192:
+    elif int(id) > 3157:
         id_file = Path(path + id + ".html")
         if id_file.exists():
             continue
@@ -35,4 +27,4 @@ for i in sel:
         html1.encode('utf-8')
         my_file = Path(path)
         if my_file.exists():
-            write_to_file(path + id + ".html", html1)
+            fishinfo.write_to_file(path + id + ".html", html1)

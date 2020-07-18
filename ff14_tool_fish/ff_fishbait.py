@@ -1,26 +1,30 @@
 import re
 import requests
 from pyquery import PyQuery as pq
-import pymysql
+import ff14_tool_fish.fishinfo as fishinfo
 
-conn = pymysql.connect(host='127.0.0.1',port=3306,user='root',password='1234',database='ff14',charset='utf8mb4')
-cur=conn.cursor()
+delsql = "DELETE FROM `ff_fishbait`"
+fishinfo.connecttomysql(delsql)
+for v in range(1,6):
+    url="https://cn.ff14angler.com/?list=bait&page="+str(v)
+    html = requests.get(url).text
+    html.encode('utf-8')
+    ff=pq(html)
+    sel=ff('ol[class=tile]').find('li').items()
+    for i in sel:
+        if len(i.find('a')) ==0:
+            continue
+        # print('%r' % i.find('a'))
+        id = re.findall(r'<a href="/bait/(.*?)" title=".*?">', i.html())
+        name=i.find('a').attr('title')
+        lv = i.find('.ilevel').text()
+        sql="INSERT INTO `ff_fishbait` (`bait_id`, `bait`, `level`) VALUES ('"+''.join(id)+"', '"+name+"', '"+lv+"')"
+        fishinfo.connecttomysql(sql)
+        print(sql)
+exsql = "INSERT INTO `ff_fishbait` (`bait_id`, `bait`) VALUES ('2001', '大型叉')"
+fishinfo.connecttomysql(exsql)
+exsql2 = "INSERT INTO `ff_fishbait` (`bait_id`, `bait`) VALUES ('2002', '中型叉')"
+fishinfo.connecttomysql(exsql2)
+exsql3 = "INSERT INTO `ff_fishbait` (`bait_id`, `bait`) VALUES ('2003', '小型叉')"
+fishinfo.connecttomysql(exsql3)
 
-# for v in range(1,7):
-url="https://ff14angler.com/index.php?lang=cn&list=bait&page=7"#+str(v)
-html = requests.get(url).text
-html.encode('utf-8')
-ff=pq(html)
-sel=ff('.list').find('tr').items()
-for i in sel:
-    id = re.findall(r'<a href="/bait/([0-9]*)">', i.html())
-    if len(id) ==0:
-        continue
-    name=re.findall(r'</span>(.*?)</a></td>',i.html())
-    lv = i.find('.ilevel').text()
-    sql="INSERT INTO `ff_fish_bait` (`bait_id`, `bait`, `level`) VALUES ('"+''.join(id)+"', '"+''.join(name)+"', '"+lv+"')"
-    cur.execute(sql)
-    conn.commit()
-    print(sql)
-cur.close()
-conn.close()
