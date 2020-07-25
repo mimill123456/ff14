@@ -77,6 +77,29 @@ def timearea(t):
         sum = t[0] + '-' + t[len(t) - 1]
         return sum
     # print("时间异常")
+
+def is_king(id):
+    '''
+    2.0-201-312 112
+    3.0-462-505 44
+    4.x-637，760-773，808-834，840-845 1+13+27+6=47
+    5.1-3179-3186 8
+    5.2-3193-3198 6,3231-3279 49
+    5.21-3295-3298 4
+    '''
+    king = ""
+    if (201<=id and id<=312) or\
+            (462<=id and id<=505) or\
+            id==637 or (760<=id and id<=773) or\
+            (808<=id and id<=834) or\
+            (840<=id and id<=845) or\
+            (3179<=id and id<=3186) or \
+            (3193<=id and id<=3198) or \
+            (3231<=id and id<=3279) or \
+            (3295<=id and id<=3298):
+        king='鱼王'
+    return king
+
 def fishinfo(fileid):
     print(fileid)
     # id = "11"
@@ -127,15 +150,10 @@ def fishinfo(fileid):
     # print(tug1)
 
     ################
-    '''2.0-201-312 112
-        3.0-462-505 44
-        4.x-637，760-773，808-834，840-845 1+13+27+6=47
-        5.1-3179-3182 4'''
+    #鱼王
     id = "".join(id)
     id=int(id)
-    king=''
-    if (201<=id and id<=312) or (462<=id and id<=505) or id==637 or (760<=id and id<=773) or (808<=id and id<=834) or (840<=id and id<=845) or (3179<=id and id<=3182):
-        king='鱼王'
+    king=is_king(id)
     id=str(id)
     ################
     # print('id:'+id)

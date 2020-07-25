@@ -1,16 +1,26 @@
 import os
-import ff14_tool_fish.fishinfo as fishinfo
-
-testid="418.html"
-
-fishinfo.fishinfo(testid)
-exit()
+import ff14_tool_fish.fishinfo_fivepointtwo as fishinfo_fivepointtwo
+import ff14_tool_fish.fishinfo as  fishinfo
+import ff14_tool_fish.ff_area_fish as area_fish
+# testid="418.html"
+#
+# fishinfo.fishinfo(testid)
+# exit()
+#######鱼数据更新1
 file_names = os.listdir("F:/htmls/fish/")
 sqls=[]
 for file in  file_names:
-    sql = fishinfo.fishinfo(file)
+    filename = "F:/htmls/fish/" + file
+    sql = fishinfo_fivepointtwo.fishinfo_fivepointtwo(filename)
     sqls.append(sql)
-fishinfo.connecttomysql(sqls)
+# fishinfo.connecttomysql(sqls)
+
+#######鱼数据更新2
+# file_names = os.listdir("F:/htmls/fish_area/")
+# sqls=[]
+# for file in  file_names:
+#     filename = "F:/htmls/fish_area/" + file
+#     area_fish.upfishinfo(filename)
 
 
 #######测试########

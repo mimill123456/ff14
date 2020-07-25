@@ -2,7 +2,7 @@ import json
 import ff14_tool_fish.fishinfo as fishinfo
 
 
-file_object = open('F:/htmls/data.json', 'r', encoding='utf-8')
+file_object = open('../ff_other_tools/data.json', 'r', encoding='utf-8')
 html = file_object.read()
 html=json.loads(html)
 sqls=[]
@@ -79,17 +79,18 @@ for ii in html['FISH']:
     # print('id:',fish_id,'name:',fish_name,'前置天气:',pW,'天气:',weather,'传承录:',folklore,'收藏品:',collectable,'鱼眼技能:',fishEyes,'提钩技能:',hookset,'杆形:',tug)
     # print(weather_names)
     sql="INSERT INTO `clock_fish` (`fish_id`, `fish_name`, `tug`, `hookset`, `collect`, `fish_eye_skill`, `folklore`, `best_catch_path`, `previous_weather`, `weather`) VALUES ('"+str(fish_id)+"', \""+str(fish_name)+"\", '"+str(tug)+"', '"+str(hookset)+"', '"+str(collectable)+"', '"+str(fishEyes)+"', '"+str(folklore)+"', '"+str(bfish)+"', '"+str(pws)+"', '"+str(ws)+"');"
-
+    # fishinfo.connecttomysql(sql)
     sql2=''
     if tug!='':
         sql2="UPDATE `ff_fish` SET `tug`='"+str(tug)+"',`folklore`='"+str(folklore)+"', `hookset`='"+str(hookset)+"', `pweather`='"+str(pws)+"', `fish_eyes_skill`='"+str(fishEyes)+"' WHERE (`fish_name`=\""+str(fish_name)+"\")"
     else:
-        sql2 = "UPDATE `ff_fish` SET `folklore`='" + str(folklore) + "', `hookset`='" + str(
+        sql2 = "UPDATE `ff_fish` SET `collect`='"+str(collectable)+"',`folklore`='" + str(folklore) + "', `hookset`='" + str(
             hookset) + "', `pweather`='" + str(pws) + "', `fish_eyes_skill`='" + str(
             fishEyes) + "' WHERE (`fish_name`=\"" + str(fish_name) + "\")"
     sqls.append(sql2)
     # print(sql)
 fishinfo.connecttomysql(sqls)
+
 
 '''UPDATE `ff_fish` SET `folklore`='1', `hookset`='1', `pweather`='1', `fish_eyes_skill`='1' WHERE (`fish_name`='1')'''
 

@@ -11,12 +11,12 @@ html = f.text
 html.encode('utf-8')
 ff=pq(html)
 sel=ff('select[name=fish]').find('option').items()
-path = "F:/htmls/fish5.25/"
+path = "F:/htmls/fish/"
 for i in sel:
     id=i.attr('value')
     if id=='0':
         continue
-    elif int(id) > 3157:
+    elif int(id) <= 3157:
         id_file = Path(path + id + ".html")
         if id_file.exists():
             continue
